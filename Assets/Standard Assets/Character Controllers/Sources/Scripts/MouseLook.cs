@@ -37,8 +37,6 @@ public class MouseLook : MonoBehaviour {
 
     void Update ()	{
         
-        #region UNITY_ANDROID
-
         if (Input.touchCount == 0)
             return;
         foreach (Touch t in Input.touches) {
@@ -60,7 +58,6 @@ public class MouseLook : MonoBehaviour {
                 _hasSwiped = false;
             }
         }
-        #endregion UNITY_ANDROID
 
         /*
         #region UNITY_EDITOR
@@ -85,7 +82,7 @@ public class MouseLook : MonoBehaviour {
 			
 			transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
 		}
-        #endregion UNITY_ANDROID    */
+        #endregion UNITY_EDITOR*/
     }
 
     void Start ()

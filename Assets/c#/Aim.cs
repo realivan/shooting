@@ -48,11 +48,9 @@ public class Aim : MonoBehaviour {
 
 	public void Targering(){
 		float aimTime = Time.time - startUnderAimTime;	// время нахождения в прицел
-		if(lastSecond && Time.time - plateAim.startTime <=0.1f){
+		if(lastSecond && 5 - (Time.time - plateAim.startTime) <= 0.1f){
 			int n = Random.Range (0, 100);
-			Debug.Log (n);
-			int percent = (int)((aimTime-startUnderAimTime)*10);
-			Debug.Log (percent);
+			float percent = aimTime * 10;
 			// процент попадания
 			if(percent >= n)
 				plateAim.DestroyPlate (true);
@@ -75,8 +73,7 @@ public class Aim : MonoBehaviour {
 			underAimTime = 1f;
 		else if (pastTime < 5) {
 			underAimTime = 1f;
-			lastSecond = true;
-			Debug.Log ("Lucky srike");
+			lastSecond = true;  // lucky strike
 		}
 	}
 	
