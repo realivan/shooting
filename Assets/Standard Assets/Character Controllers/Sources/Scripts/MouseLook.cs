@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 /// MouseLook rotates the transform based on the mouse delta.
 /// Minimum and Maximum values can be used to constrain the possible rotation
@@ -22,8 +21,8 @@ public class MouseLook : MonoBehaviour {
 	float sensitivityX = 1F;
 	float sensitivityY = 1F;
 
-	public float minimumX = -360F;
-	public float maximumX = 360F;
+	private float minimumX = -60F;
+	private float maximumX = 60F;
 
 	public float minimumY = -60F;
 	public float maximumY = 60F;
@@ -36,7 +35,27 @@ public class MouseLook : MonoBehaviour {
     private float _swipeDist;
 
     void Update ()	{
-        
+
+#if UNITY_EDITOR
+        sensitivityX = sensitivityY = 4f;
+        if (axes == RotationAxes.MouseXAndY) {
+            rotationX += Input.GetAxis("Mouse X") * sensitivityX;
+            rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+            rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
+            rotationX = Mathf.Clamp(rotationX, minimumX, maximumX);
+
+            transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
+        } else if (axes == RotationAxes.MouseX) {
+            transform.Rotate(0, Input.GetAxis("Mouse X") * sensitivityX, 0);
+        } else {
+            rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+            rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
+
+            transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
+        }
+#endif
+
+#if UNITY_ANDROID
         if (Input.touchCount == 0)
             return;
         foreach (Touch t in Input.touches) {
@@ -58,31 +77,7 @@ public class MouseLook : MonoBehaviour {
                 _hasSwiped = false;
             }
         }
-
-        /*
-        #region UNITY_EDITOR
-
-        if (axes == RotationAxes.MouseXAndY)
-		{
-			rotationX += Input.GetAxis("Mouse X") * sensitivityX;			
-			rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
-			rotationY = Mathf.Clamp (rotationY, minimumY, maximumY);
-			rotationX = Mathf.Clamp (rotationX, minimumX, maximumX);
-			
-			transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
-		}
-		else if (axes == RotationAxes.MouseX)
-		{
-			transform.Rotate(0, Input.GetAxis("Mouse X") * sensitivityX, 0);
-		}
-		else
-		{
-			rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
-			rotationY = Mathf.Clamp (rotationY, minimumY, maximumY);
-			
-			transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
-		}
-        #endregion UNITY_EDITOR*/
+#endif
     }
 
     void Start ()
